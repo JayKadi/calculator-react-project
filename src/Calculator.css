@@ -1,61 +1,119 @@
-.calculator-container {
+/* Calculator.css */
+
+.calculator {
   width: 320px;
-  margin: 40px auto;
+  margin: 50px auto;
   padding: 20px;
-  background: #222;
-  color: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+  background: #1e1e1e;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .display {
-  background: #000;
+  background: #2b2b2b;
+  color: #fff;
+  font-size: 2rem;
   padding: 15px;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
+  border-radius: 10px;
   text-align: right;
-  border-radius: 6px;
+  margin-bottom: 20px;
+  min-height: 50px;
   overflow-x: auto;
+  word-wrap: break-word;
 }
 
-.buttons {
+.controls {
   display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.left-panel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  flex: 3;
-}
-
-.right-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.controls button {
   flex: 1;
-  margin-left: 10px;
-}
-
-button {
-  padding: 20px;
-  font-size: 1.2rem;
+  margin: 2px;
+  padding: 10px;
+  font-size: 1.1rem;
   background: #444;
   border: none;
-  border-radius: 6px;
-  color: white;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
-button:hover {
+.controls button:hover {
   background: #666;
 }
 
-.history {
-  margin-top: 20px;
-  background: #111;
-  padding: 10px;
-  border-radius: 6px;
-  max-height: 120px;
-  overflow-y: auto;
+.buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
 }
+
+.buttons-grid button {
+  padding: 20px 0;
+  font-size: 1.5rem;
+  background: #333;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.buttons-grid button:hover {
+  background: #555;
+  transform: translateY(-2px);
+}
+
+.buttons-grid .equals {
+  background: #ff9500;
+  color: white;
+  grid-column: span 4; /* Make it stretch across the full row */
+}
+
+.buttons-grid .equals:hover {
+  background: #ffa733;
+}
+
+.history {
+  background: #2b2b2b;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.history h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.history button {
+  display: block;
+  margin: 10px auto;
+  padding: 5px 10px;
+  background: #444;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.history button:hover {
+  background: #666;
+}
+
+.history ul {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-left: 20px;
+}
+
+.history li {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+
