@@ -1,119 +1,216 @@
 /* Calculator.css */
 
+/* --- General Calculator Styling --- */
 .calculator {
   width: 320px;
-  margin: 50px auto;
-  padding: 20px;
-  background: #1e1e1e;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 95%;/*on laptop max width*/
+  margin: 2rem auto;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #1c1c1c;
   color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .display {
-  background: #2b2b2b;
-  color: #fff;
-  font-size: 2rem;
-  padding: 15px;
-  border-radius: 10px;
+  background: #000;
+  color: #0f0;
+  padding: 1rem;
+  border-radius: 8px;
   text-align: right;
-  margin-bottom: 20px;
-  min-height: 50px;
+  margin-bottom: 1rem;
   overflow-x: auto;
-  word-wrap: break-word;
+  white-space: nowrap;
+
+  /* Auto resize */
+  font-size: clamp(1.2rem, 5vw, 2rem);/*keeps font size responsive*/
+}
+/*clamp(min, preferred, max) → keeps font size responsive.
+
+1.2rem = minimum readable size.
+
+5vw = scales with screen width.
+
+2rem = maximum size on desktop.
+
+white-space: nowrap ensures numbers stay on one line.
+
+overflow-x: auto lets you scroll if it gets too long (safety net).*/
+
+
+.controls, .buttons-grid, .advanced-grid {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .controls {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  grid-template-columns: repeat(4, 1fr);
 }
 
-.controls button {
-  flex: 1;
-  margin: 2px;
-  padding: 10px;
+.buttons-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.buttons-grid button,
+.controls button,
+.advanced-grid button {
+  padding: 0.8rem;
   font-size: 1.1rem;
-  background: #444;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
-}
-
-.controls button:hover {
-  background: #666;
-}
-
-.buttons-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.buttons-grid button {
-  padding: 20px 0;
-  font-size: 1.5rem;
   background: #333;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  color: #fff;
 }
 
-.buttons-grid button:hover {
-  background: #555;
-  transform: translateY(-2px);
+button:hover {
+  background: #444;
 }
 
-.buttons-grid .equals {
+.equals {
+  grid-column: span 4;
   background: #ff9500;
-  color: white;
-  grid-column: span 4; /* Make it stretch across the full row */
+  font-size: 1.4rem;
 }
 
-.buttons-grid .equals:hover {
-  background: #ffa733;
+.equals:hover {
+  background: #e68a00;
 }
 
+.toggle-advanced {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.toggle-advanced:hover {
+  background: #333;
+}
+
+/* --- Advanced Panel Animation --- */
+.advanced-grid {
+  grid-template-columns: repeat(4, 1fr);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
+}
+
+.advanced-grid.show {
+  max-height: 500px; /* enough to fit all buttons */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- History --- */
 .history {
-  background: #2b2b2b;
-  padding: 10px;
-  border-radius: 10px;
+  background: #111;
+  padding: 0.8rem;
+  border-radius: 8px;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .history h3 {
   margin-top: 0;
-  font-size: 1.2rem;
-  text-align: center;
+  font-size: 1rem;
 }
 
 .history button {
-  display: block;
-  margin: 10px auto;
-  padding: 5px 10px;
+  margin-bottom: 0.5rem;
+  width: 100%;
   background: #444;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.history button:hover {
-  background: #666;
 }
 
 .history ul {
-  max-height: 150px;
-  overflow-y: auto;
-  padding-left: 20px;
-}
-
-.history li {
-  margin-bottom: 5px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
   font-size: 0.9rem;
 }
 
+.history li {
+  margin: 0.3rem 0;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.3rem;
+}
+/* --- Responsive Design on mobile phone --- */
+@media (max-width: 600px) {
+  .calculator {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 10px;
+  }
 
+  .display {
+    font-size: 1.5rem;
+    padding: 0.8rem;
+  }
+
+  button {
+    padding: 0.6rem;
+    font-size: 1rem;
+  }
+
+  .equals {
+    font-size: 1.2rem;
+  }
+
+  .history {
+    font-size: 0.8rem;
+  }
+}
+/* Default (light) */
+.calculator-app.light {
+  background-color: #f9f9f9;
+  color: #222;
+}
+
+.calculator-app.light .calculator {
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Dark mode */
+.calculator-app.dark {
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+}
+
+.calculator-app.dark .calculator {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.6);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 10px;
+  float: right;
+}
+.extra-controls {
+  display: grid;
+  grid-template-columns: 1fr auto; /* "More" takes space, theme button auto width */
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.extra-controls button {
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 1rem;
+}
