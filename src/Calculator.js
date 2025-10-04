@@ -6,7 +6,14 @@ export default function Calculator() {
   const [history, setHistory] = useState([]);
   const [memory, setMemory] = useState(null); // memory register
   const [showAdvanced, setShowAdvanced] = useState(false); // toggle for advanced features
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => {
+  const saved = localStorage.getItem("theme");
+  return saved ? saved : "light";
+});
+
+useEffect(() => {
+  localStorage.setItem("theme", theme);
+}, [theme]);
   const inputRef = useRef(input);
   useEffect(() => { inputRef.current = input; }, [input]);
 
