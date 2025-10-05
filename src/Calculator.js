@@ -9,22 +9,33 @@ recognition.lang = 'en-US';
 
 export default function Calculator() {
   const [input, setInput] = useState("");
-  recognition.onresult = (event) => {
-  const transcript = Array.from(event.results)
-    .map(result => result[0].transcript)
-    .join('');
-  processVoiceCommand(transcript);
+ recognition.onresult = (event) => {
+  let interimTranscript = "";
+  let finalTranscript = "";
+
+  for (let i = event.resultIndex; i < event.results.length; i++) {
+    const result = event.results[i][0].transcript;
+    if (event.results[i].isFinal) {
+      finalTranscript += result + " ";
+      processVoiceCommand(result); // final processing
+    } else {
+      interimTranscript += result + " ";
+      processVoiceCommand(result); // realtime processing
+    }
+  }
+
+  console.log("Interim:", interimTranscript);
+  console.log("Final:", finalTranscript);
 };
 
 // Start listening when mic button is pressed
 const handleMicDown = () => {
+  processedWords.current = []; // clear previous words
   recognition.start();
 };
-
 // Stop listening when mic button is released
-const handleMicUp = () => {
-  recognition.stop();
-};
+const handleMicUp = () => recognition.stop();
+const processedWords = useRef([]); // keep track of words already handled
   const [history, setHistory] = useState([]);
   const [memory, setMemory] = useState(null); // memory register
   const [showAdvanced, setShowAdvanced] = useState(false); // toggle for advanced features
@@ -143,10 +154,14 @@ useEffect(() => {
     console.error("Speech recognition error:", event.error);
   };
 };
+//Handles in real-time,Duplicate wors are ignored
 const processVoiceCommand = (command) => {
   const words = command.toLowerCase().split(" ");
 
   words.forEach((word) => {
+    if (processedWords.current.includes(word)) return; // skip duplicates
+    processedWords.current.push(word);
+
     // --- Numbers ---
     if (["zero", "0"].includes(word)) setInput((s) => s + "0");
     else if (["one", "1"].includes(word)) setInput((s) => s + "1");
@@ -165,29 +180,27 @@ const processVoiceCommand = (command) => {
     else if (["times", "multiply", "x", "*"].includes(word)) setInput((s) => s + "*");
     else if (["divide", "over", "/"].includes(word)) setInput((s) => s + "/");
 
+    // --- Parentheses ---
+    else if (["open", "open bracket", "("].includes(word)) setInput((s) => s + "(");
+    else if (["close", "close bracket", ")"].includes(word)) setInput((s) => s + ")");
+
     // --- Commands ---
     else if (["clear", "reset"].includes(word)) handleClear();
     else if (["delete", "backspace"].includes(word)) handleDelete();
     else if (["equals", "equal", "is", "result"].includes(word)) handleEqualClick();
     else if (["percent", "percentage", "%"].includes(word)) handlePercent();
 
-    // --- Parentheses ---
-    else if (["open", "open bracket", "("].includes(word)) setInput((s) => s + "(");
-    else if (["close", "close bracket", ")"].includes(word)) setInput((s) => s + ")");
     // --- Scientific Functions ---
     else if (["square", "squared"].includes(word)) setInput((s) => s + "**2");
     else if (["square root", "root", "sqrt"].includes(word)) setInput((s) => s + "Math.sqrt(");
     else if (["sin", "sine"].includes(word)) setInput((s) => s + "Math.sin(");
     else if (["cos", "cosine"].includes(word)) setInput((s) => s + "Math.cos(");
     else if (["tan", "tangent"].includes(word)) setInput((s) => s + "Math.tan(");
-    else if (["log", "logarithm"].includes(word)) setInput((s) => s + "Math.log10("); // base 10 log
-    else if (["ln", "natural log"].includes(word)) setInput((s) => s + "Math.log("); // natural log (base e)
+    else if (["log", "logarithm"].includes(word)) setInput((s) => s + "Math.log10(");
+    else if (["ln", "natural log"].includes(word)) setInput((s) => s + "Math.log(");
     else if (["pi", "π"].includes(word)) setInput((s) => s + "Math.PI");
   });
-
-  console.log("Processed voice command:", words);
 };
-
 
   // --- Keyboard support ---
   useEffect(() => {
