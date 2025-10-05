@@ -52,19 +52,71 @@ overflow-x: auto lets you scroll if it gets too long (safety net).*/
 .buttons-grid {
   grid-template-columns: repeat(4, 1fr);
 }
-
+/*Base button styling (common for both modes)*/
 .buttons-grid button,
 .controls button,
-.advanced-grid button {
+.advanced-grid button,
+.extra-controls button {
   padding: 0.8rem;
   font-size: 1.1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
-  background: #333;
+  transition: background 0.2s, color 0.2s;
+}
+/*end of Base button styling (common for both modes)*/
+
+/*Light mode button colors*/
+
+.calculator-app.light .buttons-grid button,
+.calculator-app.light .controls button,
+.calculator-app.light .advanced-grid button,
+.calculator-app.light .extra-controls button {
+  background-color: #eee;
+  color: #222;
+}
+
+.calculator-app.light .buttons-grid button:hover,
+.calculator-app.light .controls button:hover,
+.calculator-app.light .advanced-grid button:hover,
+.calculator-app.light .extra-controls button:hover {
+  background-color: #ddd;
+}
+
+.calculator-app.light .equals {
+  background-color: #ff9500;
   color: #fff;
 }
+
+.calculator-app.light .equals:hover {
+  background-color: #e68a00;
+}
+/*End of lightmode theme color*/
+/*Beginning of darkmode theme color*/
+.calculator-app.dark .buttons-grid button,
+.calculator-app.dark .controls button,
+.calculator-app.dark .advanced-grid button,
+.calculator-app.dark .extra-controls button {
+  background-color: #333;
+  color: #fff;
+}
+
+.calculator-app.dark .buttons-grid button:hover,
+.calculator-app.dark .controls button:hover,
+.calculator-app.dark .advanced-grid button:hover,
+.calculator-app.dark .extra-controls button:hover {
+  background-color: #444;
+}
+
+.calculator-app.dark .equals {
+  background-color: #ff9500;
+  color: #fff;
+}
+
+.calculator-app.dark .equals:hover {
+  background-color: #e68a00;
+}
+/*End of darkmode theme color*/
 
 button:hover {
   background: #444;

@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Calculator.css";
+//recognition should be scoped once outside, not inside Calculator.
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition;
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.lang = "en-US"; // English only for now
+}
 
 export default function Calculator() {
   const [input, setInput] = useState("");
@@ -10,6 +20,8 @@ export default function Calculator() {
   const saved = localStorage.getItem("theme");
   return saved ? saved : "light";
 });
+
+
 
 useEffect(() => {
   localStorage.setItem("theme", theme);
@@ -100,6 +112,70 @@ useEffect(() => {
       setInput("Error");
     }
   };
+   // --- Voice ---
+  const startListening = () => {
+  if (!recognition) {
+    alert("Speech recognition not supported in this browser.");
+    return;
+  }
+
+  recognition.start();
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript.toLowerCase();
+    console.log("Heard:", transcript);
+    processVoiceCommand(transcript);
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+  };
+};
+const processVoiceCommand = (command) => {
+  const words = command.toLowerCase().split(" ");
+
+  words.forEach((word) => {
+    // --- Numbers ---
+    if (["zero", "0"].includes(word)) setInput((s) => s + "0");
+    else if (["one", "1"].includes(word)) setInput((s) => s + "1");
+    else if (["two", "to", "too", "2"].includes(word)) setInput((s) => s + "2");
+    else if (["three", "3"].includes(word)) setInput((s) => s + "3");
+    else if (["four", "for", "fore", "4"].includes(word)) setInput((s) => s + "4");
+    else if (["five", "5"].includes(word)) setInput((s) => s + "5");
+    else if (["six", "6"].includes(word)) setInput((s) => s + "6");
+    else if (["seven", "7"].includes(word)) setInput((s) => s + "7");
+    else if (["eight", "ate", "8"].includes(word)) setInput((s) => s + "8");
+    else if (["nine", "9"].includes(word)) setInput((s) => s + "9");
+
+    // --- Operators ---
+    else if (["plus", "add", "+"].includes(word)) setInput((s) => s + "+");
+    else if (["minus", "subtract", "less", "-"].includes(word)) setInput((s) => s + "-");
+    else if (["times", "multiply", "x", "*"].includes(word)) setInput((s) => s + "*");
+    else if (["divide", "over", "/"].includes(word)) setInput((s) => s + "/");
+
+    // --- Commands ---
+    else if (["clear", "reset"].includes(word)) handleClear();
+    else if (["delete", "backspace"].includes(word)) handleDelete();
+    else if (["equals", "equal", "is", "result"].includes(word)) handleEqualClick();
+    else if (["percent", "percentage", "%"].includes(word)) handlePercent();
+
+    // --- Parentheses ---
+    else if (["open", "open bracket", "("].includes(word)) setInput((s) => s + "(");
+    else if (["close", "close bracket", ")"].includes(word)) setInput((s) => s + ")");
+    // --- Scientific Functions ---
+    else if (["square", "squared"].includes(word)) setInput((s) => s + "**2");
+    else if (["square root", "root", "sqrt"].includes(word)) setInput((s) => s + "Math.sqrt(");
+    else if (["sin", "sine"].includes(word)) setInput((s) => s + "Math.sin(");
+    else if (["cos", "cosine"].includes(word)) setInput((s) => s + "Math.cos(");
+    else if (["tan", "tangent"].includes(word)) setInput((s) => s + "Math.tan(");
+    else if (["log", "logarithm"].includes(word)) setInput((s) => s + "Math.log10("); // base 10 log
+    else if (["ln", "natural log"].includes(word)) setInput((s) => s + "Math.log("); // natural log (base e)
+    else if (["pi", "π"].includes(word)) setInput((s) => s + "Math.PI");
+  });
+
+  console.log("Processed voice command:", words);
+};
+
 
   // --- Keyboard support ---
   useEffect(() => {
@@ -175,6 +251,10 @@ useEffect(() => {
       <button className="theme-toggle" onClick={toggleTheme}>
         {theme === "light" ? "🌙" : "☀️"}
       </button>
+      {/* New mic button */}
+      <button className="mic-button" onClick={startListening}>
+    🎤
+  </button>
        </div>
 
 
