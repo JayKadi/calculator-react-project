@@ -1,18 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Calculator.css";
 //recognition should be scoped once outside, not inside Calculator.
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.continuous = true; // keeps listening while active
+recognition.interimResults = true;
+recognition.lang = 'en-US';
 
-let recognition;
-if (SpeechRecognition) {
-  recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.lang = "en-US"; // English only for now
-}
 
 export default function Calculator() {
   const [input, setInput] = useState("");
+  recognition.onresult = (event) => {
+  const transcript = Array.from(event.results)
+    .map(result => result[0].transcript)
+    .join('');
+  processVoiceCommand(transcript);
+};
+
+// Start listening when mic button is pressed
+const handleMicDown = () => {
+  recognition.start();
+};
+
+// Stop listening when mic button is released
+const handleMicUp = () => {
+  recognition.stop();
+};
   const [history, setHistory] = useState([]);
   const [memory, setMemory] = useState(null); // memory register
   const [showAdvanced, setShowAdvanced] = useState(false); // toggle for advanced features
@@ -252,9 +264,15 @@ const processVoiceCommand = (command) => {
         {theme === "light" ? "🌙" : "☀️"}
       </button>
       {/* New mic button */}
-      <button className="mic-button" onClick={startListening}>
-    🎤
-  </button>
+      <button
+  onMouseDown={handleMicDown}
+  onMouseUp={handleMicUp}
+  onTouchStart={handleMicDown}   // for mobile
+  onTouchEnd={handleMicUp}       // for mobile
+>
+  🎤
+</button>
+
        </div>
 
 
