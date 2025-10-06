@@ -11,9 +11,13 @@ It performs basic arithmetic as well as advanced scientific operations, supports
 * 🎨 Responsive, grid-based layout
 * 🌙☀️ Dark/Light mode toggle
 * 🔽 "More" button to reveal scientific calculator functions:
-
-  * Square root, square, trigonometric functions, logarithms, π, etc.
+ * Square root, square, trigonometric functions, logarithms, π, etc.
 * ⌨️ Keyboard input support
+* A converter tab
+*  Currency conversion to USD and EUR
+*  Has a  mobile UI/UX
+*  Ripple effect on button presses
+
 
 ## 🛠️ Tech Stack
 
@@ -28,12 +32,16 @@ It performs basic arithmetic as well as advanced scientific operations, supports
 * Switch between **Light** and **Dark** modes using the toggle button.
 * View previous calculations in the **History** section.
 * Voice input support 🎙️ using the microphone button
-*  Has a  mobile UI/UX
+*  Currency conversion to USD and EUR
+*  Memory functions (store/reuse numbers)
+*  Ripple effect on button presses
 
 
 ## 📌 Future Improvements
-
-* Memory functions (store/reuse numbers)
+* Length,Mass,Area,Time,Discount conversion
+* Make it installable
+* Voice feedback
+* Offline support
 
 
 
