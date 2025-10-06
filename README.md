@@ -22,17 +22,19 @@ It performs basic arithmetic as well as advanced scientific operations, supports
 
 ## 🎮 Usage
 
-* Click the buttons or use your keyboard to enter numbers/operators.
+* Click the buttons or use your keyboard to enter numbers/operators and also delete.
 * Press **C** to clear, **⌫** to delete the last input.
 * Use the **More ▼** button to access scientific functions.
 * Switch between **Light** and **Dark** modes using the toggle button.
 * View previous calculations in the **History** section.
+* Voice input support 🎙️ using the microphone button
+*  Has a  mobile UI/UX
 
 
 ## 📌 Future Improvements
 
 * Memory functions (store/reuse numbers)
-* Better mobile UI/UX
-* Voice input support 🎙️
+
+
 
 --
