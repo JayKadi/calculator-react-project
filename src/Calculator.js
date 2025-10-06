@@ -257,7 +257,6 @@ const processVoiceCommand = (command) => {
   return (
      <div className={`calculator-app ${theme}`}>
     <div className={`app ${theme}`}>
-  <Calculator />
       <div className="top-bar"> 
   <button onClick={toggleHistory}>
     History ⌄
