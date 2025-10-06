@@ -1,0 +1,52 @@
+/* App.css */
+
+.app-container {
+  max-width: 400px; /* same width as your calculator */
+  margin: 40px auto; /* centers it vertically and horizontally */
+  background-color: var(--bg-color, #f9f9f9);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden; /* keeps tabs inside rounded corners */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Top Tabs */
+.top-tabs {
+  display: flex;
+  background-color: #4b0082; /* deep purple */
+}
+
+.top-tabs button {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ccc;
+  background-color: inherit;
+  transition: all 0.3s ease;
+}
+
+.top-tabs button.active {
+  color: #fff;
+  background-color: #6a1b9a; /* slightly lighter purple */
+}
+
+.top-tabs button:hover {
+  background-color: #5e35b1;
+  color: #fff;
+}
+
+/* Converter placeholder */
+.converter-dashboard {
+  padding: 40px;
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Optional: add a subtle divider between tabs and calculator */
+.app-container > .top-tabs {
+  border-bottom: 1px solid #ddd;
+}

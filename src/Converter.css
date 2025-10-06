@@ -1,0 +1,86 @@
+/* Converter.css */
+
+.converter {
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.converter h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.converter-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.converter-inputs input,
+.converter-inputs select {
+  padding: 10px;
+  font-size: 1rem;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.converter-inputs input:focus,
+.converter-inputs select:focus {
+  border-color: #6200ea;
+  box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
+}
+
+.converter-inputs button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.converter-inputs button:hover {
+  background-color: #4500b5;
+}
+
+.converter-result {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+/* Dark theme support */
+.dark .converter h2,
+.dark .converter-result {
+  color: #ddd;
+}
+
+.dark .converter-inputs input,
+.dark .converter-inputs select {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.dark .converter-inputs input:focus,
+.dark .converter-inputs select:focus {
+  border-color: #bb86fc;
+  box-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+}
+
+.dark .converter-inputs button {
+  background-color: #bb86fc;
+  color: #222;
+}
+
+.dark .converter-inputs button:hover {
+  background-color: #9b4efc;
+}
