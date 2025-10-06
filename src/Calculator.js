@@ -86,19 +86,31 @@ useEffect(() => {
     setInput(String(result));
   };
 
-  // --- Memory functions ---
-  const handleMemoryAdd = () => {
-    const val = parseFloat(input);
-    if (!isNaN(val)) setMemory((m) => (m !== null ? m + val : val));
-  };
-  const handleMemorySubtract = () => {
-    const val = parseFloat(input);
-    if (!isNaN(val)) setMemory((m) => (m !== null ? m - val : -val));
-  };
-  const handleMemoryRecall = () => {
-    if (memory !== null) setInput((s) => s + memory.toString());
-  };
-  const handleMemoryClear = () => setMemory(null);
+
+ // --- Memory functions ---
+const handleMemoryAdd = () => {
+  const val = parseFloat(input);
+  if (!isNaN(val)) {
+    setMemory((m) => (m !== null ? m + val : val)); // add to existing or set
+  }
+};
+
+const handleMemorySubtract = () => {
+  const val = parseFloat(input);
+  if (!isNaN(val)) {
+    setMemory((m) => (m !== null ? m - val : -val)); // subtract from existing
+  }
+};
+
+const handleMemoryRecall = () => {
+  if (memory !== null) {
+    setInput(String(memory)); // replaces input instead of appending
+  }
+};
+
+const handleMemoryClear = () => {
+  setMemory(null); // clears memory
+};
 
   // --- Utility handlers ---
   const handleClear = () => setInput("");
@@ -140,25 +152,7 @@ useEffect(() => {
       setInput("Error");
     }
   };
-   // --- Voice ---
-  const startListening = () => {
-  if (!recognition) {
-    alert("Speech recognition not supported in this browser.");
-    return;
-  }
-
-  recognition.start();
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript.toLowerCase();
-    console.log("Heard:", transcript);
-    processVoiceCommand(transcript);
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-  };
-};
+  
 //Handles in real-time,Duplicate words are ignored
 const processVoiceCommand = (command) => {
   const words = command.toLowerCase().split(" ");
