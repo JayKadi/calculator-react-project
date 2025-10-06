@@ -167,7 +167,8 @@ button:hover {
 
 /* --- History --- */
 .history {
-  background: #111;
+  background: var(--history-bg);
+  color: var(--history-text);
   padding: 0.8rem;
   border-radius: 8px;
   max-height: 150px;
@@ -177,12 +178,22 @@ button:hover {
 .history h3 {
   margin-top: 0;
   font-size: 1rem;
+  color: var(--history-text);
 }
 
 .history button {
   margin-bottom: 0.5rem;
   width: 100%;
-  background: #444;
+  background: var(--history-btn-bg);
+  color: var(--history-btn-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.history button:hover {
+  opacity: 0.9;
 }
 
 .history ul {
@@ -194,9 +205,42 @@ button:hover {
 
 .history li {
   margin: 0.3rem 0;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--history-border);
   padding-bottom: 0.3rem;
+  color: var(--history-text);
 }
+/* Light mode (default) */
+:root {
+  --history-bg: #f5f5f5;
+  --history-text: #111;
+  --history-border: #ccc;
+  --history-btn-bg: #ddd;
+  --history-btn-text: #111;
+}
+
+/* Dark mode */
+.dark {
+  --history-bg: #111;
+  --history-text: #f5f5f5;
+  --history-border: #333;
+  --history-btn-bg: #444;
+  --history-btn-text: #f5f5f5;
+}
+.history-btn {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.history-btn:hover {
+  background-color: var(--btn-hover);
+}
+
+
 /* --- Responsive Design on mobile phone --- */
 @media (max-width: 600px) {
   .calculator {
@@ -280,3 +324,4 @@ button:hover {
   50% { opacity: 1; }
   100% { opacity: 0.2; }
 }
+

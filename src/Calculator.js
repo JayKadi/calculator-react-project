@@ -42,6 +42,17 @@ const handleMicUp = () => {
 const [listening, setListening] = useState(false);//visual indicator
 const processedWords = useRef([]); // keep track of words already handled
   const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+
+// Add calculation to history after every "="
+const addToHistory = (expression, result) => {
+  setHistory(prev => [`${expression} = ${result}`, ...prev]);
+};
+
+// Toggle the history dropdown
+const toggleHistory = () => {
+  setShowHistory(prev => !prev);
+};
   const [memory, setMemory] = useState(null); // memory register
   const [showAdvanced, setShowAdvanced] = useState(false); // toggle for advanced features
   const [theme, setTheme] = useState(() => {
@@ -82,7 +93,7 @@ useEffect(() => {
       setInput("Error");
       return;
     }
-    setHistory((h) => [...h, `${input} = ${result}`]);
+   addToHistory(input, result);
     setInput(String(result));
   };
 
@@ -245,7 +256,41 @@ const processVoiceCommand = (command) => {
 
   return (
      <div className={`calculator-app ${theme}`}>
-    <div className="calculator">
+    <div className={`app ${theme}`}>
+  <Calculator />
+      <div className="top-bar"> 
+  <button onClick={toggleHistory}>
+    History ⌄
+  </button>
+</div>
+
+{showHistory && (
+  <div className="history-panel">
+    {history.length === 0 ? (
+      <p></p>
+    ) : (
+      <>
+        {history.map((entry, index) => (
+          <div
+            key={index}
+            className="history-entry"
+            onClick={() => setInput(entry.split("=")[0].trim())}
+          >
+            {entry}
+          </div>
+        ))}
+        {/* Clear button */}
+        <button 
+          className="clear-history" 
+          onClick={() => setHistory([])}
+        >
+          Clear History
+        </button>
+      </>
+    )}
+  </div>
+)}
+
       <div className="display">{input || "0"}</div>
 
       <div className="controls">
@@ -317,14 +362,7 @@ const processVoiceCommand = (command) => {
         </div>
       )}
 
-      <div className="history">
-        <h3>History</h3>
-        <button onClick={() => setHistory([])}>Clear History</button>
-        <ul>{history.map((h, i) =>(
-          <li key={i}>{h}</li>
-      ))}
-      </ul>
-    </div>
+  
     </div> 
       </div>
 
