@@ -266,3 +266,17 @@ button:hover {
   border-radius: 6px;
   font-size: 1rem;
 }
+/*Visual indicator showing a pulsing mic*/
+.mic-indicator {
+  margin-top: 5px;
+  font-size: 14px;
+  color: red;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}

@@ -30,11 +30,16 @@ export default function Calculator() {
 
 // Start listening when mic button is pressed
 const handleMicDown = () => {
-  processedWords.current = []; // clear previous words
+  processedWords.current = [];
   recognition.start();
+  setListening(true);
 };
 // Stop listening when mic button is released
-const handleMicUp = () => recognition.stop();
+const handleMicUp = () => {
+  recognition.stop();
+  setListening(false);
+};
+const [listening, setListening] = useState(false);//visual indicator
 const processedWords = useRef([]); // keep track of words already handled
   const [history, setHistory] = useState([]);
   const [memory, setMemory] = useState(null); // memory register
@@ -154,7 +159,7 @@ useEffect(() => {
     console.error("Speech recognition error:", event.error);
   };
 };
-//Handles in real-time,Duplicate wors are ignored
+//Handles in real-time,Duplicate words are ignored
 const processVoiceCommand = (command) => {
   const words = command.toLowerCase().split(" ");
 
@@ -285,7 +290,12 @@ const processVoiceCommand = (command) => {
 >
   🎤
 </button>
-
+{/* Visual speaking indicator */}
+{listening && (
+  <div className="mic-indicator">
+    🔴 Listening...
+  </div>
+)}
        </div>
 
 
