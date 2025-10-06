@@ -9,6 +9,8 @@ recognition.lang = 'en-US';
 
 export default function Calculator() {
   const [input, setInput] = useState("");
+  const [ripples, setRipples] = useState([]);
+  const [pressedButton, setPressedButton] = useState(null); //tracks button currently pressed
  recognition.onresult = (event) => {
   let interimTranscript = "";
   let finalTranscript = "";
@@ -73,7 +75,28 @@ useEffect(() => {
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
+  //creates a ripple effect
+  const createRipple = (event, button) => {
+  const rect = event.currentTarget.getBoundingClientRect();
+const size = Math.max(rect.width, rect.height); // dynamic
+let x, y;
+  if (event.touches) {
+    // Touch event
+    x = event.touches[0].clientX - rect.left;
+    y = event.touches[0].clientY - rect.top;
+  } else {
+    // Mouse event
+    x = event.clientX - rect.left;
+    y = event.clientY - rect.top;
+  }
+const newRipple = { x, y, size, button }; // include size
+  setRipples((prev) => [...prev, newRipple]);
 
+  setTimeout(() => {
+    setRipples((prev) => prev.filter((r) => r !== newRipple));
+  }, 600); // duration of animation
+};
+//end of ripple effect
   // --- Safe evaluate ---
   const safeEvaluate = (expr) => {
     if (!expr) return "";
@@ -245,7 +268,7 @@ const processVoiceCommand = (command) => {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [handlePercent]);
 
   const buttons = [
     "7","8","9","/",
@@ -299,14 +322,65 @@ const processVoiceCommand = (command) => {
         <button onClick={handlePercent}>%</button>
       </div>
 
-      <div className="buttons-grid">
-        {buttons.map((b) => (
-          <button key={b} onClick={() => setInput((s) => s + b)}>
-            {b}
-          </button>
+     <div className="buttons-grid">
+  {buttons.map((b) => (
+    <button
+      key={b}
+      className={`calc-btn ${theme} ${pressedButton === b ? "pressed" : ""}`}
+      onClick={(e) => {
+        setInput((s) => s + b);
+        createRipple(e, b); // triggers ripple animation
+      }}
+      onMouseDown={() => setPressedButton(b)}
+      onMouseUp={() => setPressedButton(null)}
+      onMouseLeave={() => setPressedButton(null)}
+      onTouchStart={() => setPressedButton(b)}
+      onTouchEnd={() => setPressedButton(null)}
+    >
+      {b}
+      {ripples
+        .filter(r => r.button === b)
+        .map((r, i) => (
+          <span
+            key={i}
+            className="ripple"
+            style={{ left: r.x, top: r.y }}
+          />
         ))}
-        <button className="equals" onClick={handleEqualClick}>=</button>
-      </div>
+    </button>
+  ))}
+
+  {/* Equals button */}
+  <button
+    className={`equals calc-btn ${theme}`}
+    onClick={(e) => {
+      handleEqualClick();
+      createRipple(e, "=");
+    }}
+    onMouseDown={() => setPressedButton("=")}
+    onMouseUp={() => setPressedButton(null)}
+    onMouseLeave={() => setPressedButton(null)}
+    onTouchStart={() => setPressedButton("=")}
+    onTouchEnd={() => setPressedButton(null)}
+  >
+    =
+    {ripples
+      .filter(r => r.button === "=")
+      .map((r, i) => (
+        <span
+  key={i}
+  className="ripple"
+  style={{
+    left: r.x,
+    top: r.y,
+    width: r.size,
+    height: r.size,
+  }}
+/>
+      ))}
+  </button>
+</div>
+
  {/* Extra controls row */}
       {/* --- Advanced section toggle --- */}
       <div className="extra-controls">
