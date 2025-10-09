@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Calculator.css";
+import { motion } from "framer-motion";
 //recognition should be scoped once outside, not inside Calculator.
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 recognition.continuous = true; // keeps listening while active
@@ -30,19 +31,39 @@ export default function Calculator() {
   console.log("Final:", finalTranscript);
 };
 
-// Start listening when mic button is pressed
+/// Start listening when mic button is pressed
 const handleMicDown = () => {
-  processedWords.current = [];
-  recognition.start();
-  setListening(true);
+  // ✅ Only start if not already listening
+  if (!listening) {
+    try {
+      processedWords.current = [];
+      recognition.start();
+      setListening(true);
+    } catch (err) {
+      console.warn("Speech recognition already started or failed:", err);
+    }
+  }
 };
+
 // Stop listening when mic button is released
 const handleMicUp = () => {
-  recognition.stop();
-  setListening(false);
+  // ✅ Only stop if it's currently listening
+  if (listening) {
+    try {
+      recognition.stop();
+      setListening(false);
+    } catch (err) {
+      console.warn("Error stopping recognition:", err);
+    }
+  }
 };
 const [listening, setListening] = useState(false);//visual indicator
 const processedWords = useRef([]); // keep track of words already handled
+const speak = (text) => {
+  if (!text) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(utterance);
+};  //helper function for speech
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
@@ -61,16 +82,12 @@ const toggleHistory = () => {
   const saved = localStorage.getItem("theme");
   return saved ? saved : "light";
 });
-
-
-
 useEffect(() => {
   localStorage.setItem("theme", theme);
 }, [theme]);
   const inputRef = useRef(input);
   useEffect(() => { inputRef.current = input; }, [input]);
 
-  
   // toggle theme function
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
@@ -220,8 +237,15 @@ const processVoiceCommand = (command) => {
     // --- Commands ---
     else if (["clear", "reset"].includes(word)) handleClear();
     else if (["delete", "backspace"].includes(word)) handleDelete();
-    else if (["equals", "equal", "is", "result"].includes(word)) handleEqualClick();
     else if (["percent", "percentage", "%"].includes(word)) handlePercent();
+
+    // --- Equals (Voice Feedback) ---
+    else if (["equals", "equal", "is", "result"].includes(word)) {
+      handleEqualClick();
+      setTimeout(() => {
+        speak(`The result is ${inputRef.current}`);
+      }, 300); // small delay ensures inputRef updates
+    }
 
     // --- Scientific Functions ---
     else if (["square", "squared"].includes(word)) setInput((s) => s + "**2");
@@ -276,6 +300,46 @@ const processVoiceCommand = (command) => {
     "1","2","3","-",
     "0",".","%","+"
   ];
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05, // delay between each button
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: "easeOut" } },
+  exit: { opacity: 0, y: 20, transition: { duration: 0.15 } },
+};
+
+ function CalculatorButtons({ handleClick }) {
+  return (
+    <motion.div
+      className="buttons-grid"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    >
+      {buttons.map((btn, index) => (
+        <motion.button
+          key={index}
+          variants={itemVariants}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => handleClick(btn)}
+        >
+          {btn}
+        </motion.button>
+      ))}
+    </motion.div>
+  );
+}
 
   return (
      <div className={`calculator-app ${theme}`}>
@@ -322,15 +386,16 @@ const processVoiceCommand = (command) => {
         <button onClick={handlePercent}>%</button>
       </div>
 
-     <div className="buttons-grid">
-  {buttons.map((b) => (
-    <button
-      key={b}
+    <div className="buttons-grid">
+  {buttons.map((b, index) => (
+    <motion.button
+      key={index} // use index or b itself
       className={`calc-btn ${theme} ${pressedButton === b ? "pressed" : ""}`}
       onClick={(e) => {
         setInput((s) => s + b);
-        createRipple(e, b); // triggers ripple animation
+        createRipple(e, b); // keeps ripple effect
       }}
+      whileTap={{ scale: 0.95 }}
       onMouseDown={() => setPressedButton(b)}
       onMouseUp={() => setPressedButton(null)}
       onMouseLeave={() => setPressedButton(null)}
@@ -339,76 +404,100 @@ const processVoiceCommand = (command) => {
     >
       {b}
       {ripples
-        .filter(r => r.button === b)
+        .filter((r) => r.button === b)
         .map((r, i) => (
           <span
             key={i}
             className="ripple"
-            style={{ left: r.x, top: r.y }}
+            style={{
+              left: r.x,
+              top: r.y,
+              width: r.size,
+              height: r.size,
+            }}
           />
         ))}
-    </button>
+    </motion.button>
   ))}
 
+
   {/* Equals button */}
-  <button
-    className={`equals calc-btn ${theme}`}
-    onClick={(e) => {
-      handleEqualClick();
-      createRipple(e, "=");
-    }}
-    onMouseDown={() => setPressedButton("=")}
-    onMouseUp={() => setPressedButton(null)}
-    onMouseLeave={() => setPressedButton(null)}
-    onTouchStart={() => setPressedButton("=")}
-    onTouchEnd={() => setPressedButton(null)}
-  >
-    =
-    {ripples
-      .filter(r => r.button === "=")
-      .map((r, i) => (
-        <span
-  key={i}
-  className="ripple"
-  style={{
-    left: r.x,
-    top: r.y,
-    width: r.size,
-    height: r.size,
+  <motion.button
+  className={`equals calc-btn ${theme}`}
+  onClick={(e) => {
+    handleEqualClick();
+    createRipple(e, "="); // keeps ripple effect
   }}
-/>
-      ))}
-  </button>
+  whileTap={{ scale: 0.95 }} // subtle press animation
+  onMouseDown={() => setPressedButton("=")}
+  onMouseUp={() => setPressedButton(null)}
+  onMouseLeave={() => setPressedButton(null)}
+  onTouchStart={() => setPressedButton("=")}
+  onTouchEnd={() => setPressedButton(null)}
+>
+  =
+  {ripples
+    .filter(r => r.button === "=")
+    .map((r, i) => (
+      <span
+        key={i}
+        className="ripple"
+        style={{
+          left: r.x,
+          top: r.y,
+          width: r.size,
+          height: r.size,
+        }}
+      />
+    ))}
+</motion.button>
 </div>
 
  {/* Extra controls row */}
       {/* --- Advanced section toggle --- */}
       <div className="extra-controls">
-      <button
-        className="toggle-advanced"
-        onClick={() => setShowAdvanced((s) => !s)}
+  {/* Top row: More + Theme */}
+    <button
+      className="toggle-advanced"
+      onClick={() => setShowAdvanced((s) => !s)}
+    >
+      {showAdvanced ? "Less ▲" : "More ▼"}
+    </button>
+
+    <button className="theme-toggle" onClick={toggleTheme}>
+      {theme === "light" ? "🌙" : "☀️"}
+    </button>
+
+  {/* Mic button below */}
+    <button
+      className="mic-btn"
+      onMouseDown={handleMicDown}
+      onMouseUp={handleMicUp}
+      onTouchStart={handleMicDown}
+      onTouchEnd={handleMicUp}
+    >
+      🎤
+    </button>
+
+    {listening && (
+      <motion.div
+        className="mic-indicator"
+        initial={{ opacity: 0.6, scale: 1 }}
+        animate={{
+          opacity: [0.6, 1, 0.6],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 1.2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
       >
-        {showAdvanced ? "Less ▲" : "More ▼"}
-      </button>
-      <button className="theme-toggle" onClick={toggleTheme}>
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
-      {/* New mic button */}
-      <button
-  onMouseDown={handleMicDown}
-  onMouseUp={handleMicUp}
-  onTouchStart={handleMicDown}   // for mobile
-  onTouchEnd={handleMicUp}       // for mobile
->
-  🎤
-</button>
-{/* Visual speaking indicator */}
-{listening && (
-  <div className="mic-indicator">
-    🔴 Listening...
-  </div>
-)}
-       </div>
+        🔴 Listening...
+      </motion.div>
+    )}
+</div>
+       
 
 
       {showAdvanced && (
@@ -434,7 +523,6 @@ const processVoiceCommand = (command) => {
           <button onClick={handleMemorySubtract}>M-</button>
         </div>
       )}
-
   
     </div> 
       </div>

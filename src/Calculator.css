@@ -240,7 +240,45 @@ button:hover {
   background-color: var(--btn-hover);
 }
 
+.history-toggle-btn {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background 0.3s, box-shadow 0.3s;
+}
 
+.history-toggle-btn.light {
+  background-color: #eee;
+  color: #222;
+}
+
+.history-toggle-btn.dark {
+  background-color: #333;
+  color: #fff;
+}
+.clear-history {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+}
+
+.clear-history.light {
+  background-color: #ddd;
+  color: #222;
+}
+
+.clear-history.dark {
+  background-color: #555;
+  color: #fff;
+}
 /* --- Responsive Design on mobile phone --- */
 @media (max-width: 600px) {
   .calculator {
@@ -312,11 +350,12 @@ button:hover {
 }
 /*Visual indicator showing a pulsing mic*/
 .mic-indicator {
-  margin-top: 5px;
-  font-size: 14px;
-  color: red;
-  font-weight: bold;
-  animation: pulse 1s infinite;
+  color: #ff4d4d;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1rem;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
 }
 
 @keyframes pulse {
@@ -356,4 +395,21 @@ button:hover {
 /* Theme-aware ripple */
 .calculator-app.dark .calc-btn .ripple {
   background: rgba(153, 51, 255, 0.3); /* lighter ripple for dark bg */
+}
+/*CSS for sliding panel*/
+.history-panel-slide {
+  background-color: inherit; /* matches theme */
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.history-panel-slide h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
