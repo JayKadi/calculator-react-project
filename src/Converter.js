@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Converter.css";
+import { motion, AnimatePresence } from "framer-motion";
 
 //
 // ─── CURRENCY CONVERTER ───────────────────────────────────────────────
@@ -17,7 +18,13 @@ function CurrencyConverter() {
   };
 
   return (
-    <div className="converter-content">
+    <motion.div
+      className="converter-content"
+      initial={{ opacity: 0, y: 30 }}        // starts slightly lower and transparent
+      animate={{ opacity: 1, y: 0 }}         // slides up and fades in
+      exit={{ opacity: 0, y: -30 }}          // slides up and fades out when leaving
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
       <h2>Currency Converter</h2>
       <div className="converter-inputs">
         <input
@@ -43,7 +50,7 @@ function CurrencyConverter() {
           {amount} {fromCurrency} = {converted} {toCurrency}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -70,7 +77,13 @@ function LengthConverter() {
   };
 
   return (
-    <div className="converter-content">
+    <motion.div
+      className="converter-content"
+      initial={{ opacity: 0, y: 30 }}        // starts slightly lower and transparent
+      animate={{ opacity: 1, y: 0 }}         // slides up and fades in
+      exit={{ opacity: 0, y: -30 }}          // slides up and fades out when leaving
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
       <h3>Length Converter</h3>
 
       {/* Direction info */}
@@ -106,7 +119,7 @@ function LengthConverter() {
           {length} {fromUnit} = {converted} {toUnit}
         </div>
       )}
-    </div>
+   </motion.div>
   );
 }
 
@@ -129,7 +142,13 @@ function MassConverter() {
   };
 
   return (
-    <div className="converter-content">
+    <motion.div
+      className="converter-content"
+      initial={{ opacity: 0, y: 30 }}        // starts slightly lower and transparent
+      animate={{ opacity: 1, y: 0 }}         // slides up and fades in
+      exit={{ opacity: 0, y: -30 }}          // slides up and fades out when leaving
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
       <h2>Mass Converter</h2>
       <div className="converter-inputs">
         <input
@@ -162,7 +181,7 @@ function MassConverter() {
       <p className="conversion-info">
         {fromUnit} → {toUnit}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -185,7 +204,13 @@ function AreaConverter() {
   };
 
   return (
-    <div className="converter-content">
+    <motion.div
+      className="converter-content"
+      initial={{ opacity: 0, y: 30 }}        // starts slightly lower and transparent
+      animate={{ opacity: 1, y: 0 }}         // slides up and fades in
+      exit={{ opacity: 0, y: -30 }}          // slides up and fades out when leaving
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
       <h2>Area Converter</h2>
 
       <div className="converter-inputs">
@@ -221,7 +246,7 @@ function AreaConverter() {
       <p className="conversion-info">
         {fromUnit} → {toUnit}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -244,7 +269,13 @@ function TimeConverter() {
   };
 
   return (
-    <div className="converter-content">
+    <motion.div
+      className="converter-content"
+      initial={{ opacity: 0, y: 30 }}        // starts slightly lower and transparent
+      animate={{ opacity: 1, y: 0 }}         // slides up and fades in
+      exit={{ opacity: 0, y: -30 }}          // slides up and fades out when leaving
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
       <h2>Time Converter</h2>
 
       <div className="converter-inputs">
@@ -282,7 +313,7 @@ function TimeConverter() {
       <p className="conversion-info">
         {fromUnit} → {toUnit}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -302,7 +333,13 @@ function DiscountConverter() {
   };
 
   return (
-    <div className="converter-content">
+<motion.div
+      className="converter-content"
+      initial={{ opacity: 0, y: 30 }}        // starts slightly lower and transparent
+      animate={{ opacity: 1, y: 0 }}         // slides up and fades in
+      exit={{ opacity: 0, y: -30 }}          // slides up and fades out when leaving
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
       <h2>Discount Calculator</h2>
 
       <div className="converter-inputs">
@@ -332,7 +369,7 @@ function DiscountConverter() {
       <p className="conversion-info">
         Discount Applied → Final Price
       </p>
-    </div>
+       </motion.div>
   );
 }
 
@@ -391,12 +428,14 @@ export default function Converter() {
 
       {/* Active Converter Display */}
       <div className="converter-display">
+         <AnimatePresence mode="wait">
         {activeConverter === "currency" && <CurrencyConverter />}
         {activeConverter === "length" && <LengthConverter />}
         {activeConverter === "mass" && <MassConverter />}
         {activeConverter === "area" && <AreaConverter />}
         {activeConverter === "time" && <TimeConverter />}
         {activeConverter === "discount" && <DiscountConverter />}
+      </AnimatePresence>
       </div>
     </div>
   );
