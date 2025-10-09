@@ -1,86 +1,127 @@
-/* Converter.css */
-
-.converter {
-  padding: 20px;
-  text-align: center;
-  font-family: sans-serif;
+.converter-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  width: 90%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+/* The button rows container */
+.converter-tabs {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centers rows horizontally */
+  gap: 15px;
+  margin-bottom: 25px;
 }
 
-.converter h2 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
+/* Each row (Currency/Length/Mass) and (Area/Time/Discount) */
+.converter-row {
+  display: flex;
+  justify-content: center; /* centers buttons horizontally */
+  gap: 16px; /* ⬅️ increased from 10px to 16px for more breathing room */
+  flex-wrap: wrap;
+}
+
+/* Each button */
+.converter-row button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.converter-row button:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.converter-row button.active {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Converter display area */
+.converter-display {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.converter-content {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 70%;
+  max-width: 400px;
+  text-align: center;
 }
 
 .converter-inputs {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .converter-inputs input,
 .converter-inputs select {
-  padding: 10px;
-  font-size: 1rem;
-  width: 200px;
+  padding: 0.6rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.converter-inputs input:focus,
-.converter-inputs select:focus {
-  border-color: #6200ea;
-  box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
 }
 
 .converter-inputs button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #6200ea;
+  background-color: var(--accent-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.converter-inputs button:hover {
-  background-color: #4500b5;
 }
 
 .converter-result {
-  margin-top: 20px;
+  margin-top: 1.5rem;
+  font-weight: bold;
   font-size: 1.2rem;
-  color: #222;
+  color: var(--accent-color);
 }
 
-/* Dark theme support */
-.dark .converter h2,
-.dark .converter-result {
-  color: #ddd;
+/* Theme variables */
+:root {
+  --bg-color: #1e1e2f;
+  --text-color: #f0f0f0;
+  --accent-color: #8a2be2;
+  --card-bg: #2f2f45;
+}
+.conversion-info {
+  font-size: 0.9rem;
+  color: var(--purple, #7e57c2);
+  margin-bottom: 8px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+/*Aligns the kilogram and pound button in a row*/
+.unit-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* space between the two dropdowns */
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.dark .converter-inputs input,
-.dark .converter-inputs select {
-  background: #333;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-.dark .converter-inputs input:focus,
-.dark .converter-inputs select:focus {
-  border-color: #bb86fc;
-  box-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
-}
-
-.dark .converter-inputs button {
-  background-color: #bb86fc;
-  color: #222;
-}
-
-.dark .converter-inputs button:hover {
-  background-color: #9b4efc;
+.converter-inputs button {
+  display: block;
+  margin: 10px auto 0;
 }
