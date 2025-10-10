@@ -17,6 +17,12 @@ It performs basic arithmetic as well as advanced scientific operations, supports
 *  Currency conversion to USD and EUR
 *  Has a  mobile UI/UX
 *  Ripple effect on button presses
+*  Buttons and interactive elements use Framer Motion animations for a responsive and engaging experience.
+*  Length conversion to metres and feet
+*  Mass conversion from kilograms to pounds
+*  Area conversion from sqaure metres to square feet
+*  Hours conversion from hours to minutes
+*  Discount conversion
 
 
 ## 🛠️ Tech Stack
@@ -33,15 +39,19 @@ It performs basic arithmetic as well as advanced scientific operations, supports
 * View previous calculations in the **History** section.
 * Voice input support 🎙️ using the microphone button
 *  Currency conversion to USD and EUR
+*  Length conversion to metres and feet
+*  Mass conversion from kilograms to pounds
+*  Area conversion from sqaure metres to square feet
+*  Hours conversion from hours to minutes
+*  Discount conversion
 *  Memory functions (store/reuse numbers)
 *  Ripple effect on button presses
+*  the calculator responds with spoken results when you use voice commands.
 
 
 ## 📌 Future Improvements
-* Length,Mass,Area,Time,Discount conversion
 * Make it installable
-* Voice feedback
-* Offline support
+  
 
 
 
