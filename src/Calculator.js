@@ -64,7 +64,10 @@ const speak = (text) => {
   const utterance = new SpeechSynthesisUtterance(text);
   speechSynthesis.speak(utterance);
 };  //helper function for speech
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+  const saved = localStorage.getItem("calc-history");
+  return saved ? JSON.parse(saved) : [];
+}); //istory is stored in local storage
   const [showHistory, setShowHistory] = useState(false);
 
 // Add calculation to history after every "="
@@ -165,6 +168,20 @@ const handleMemoryClear = () => {
 
   // --- Utility handlers ---
   const handleClear = () => setInput("");
+  const handleDownloadHistory = () => {
+  if (history.length === 0) {
+    alert("No history to download!");
+    return;
+  }
+
+  const historyContent = history.join("\n"); // each entry on a new line
+  const blob = new Blob([historyContent], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "calculator_history.txt";
+  link.click();
+  URL.revokeObjectURL(link.href);
+};
   const handleDelete = () => setInput((s) => s.slice(0, -1));
   const handleToggleSign = () => {
     setInput((s) => (s.startsWith("-") ? s.slice(1) : "-" + s));
@@ -176,6 +193,9 @@ const handleMemoryClear = () => {
     setHistory((h) => [...h, `${input}% = ${res}`]);
     setInput(String(res));
   };
+useEffect(() => {
+  localStorage.setItem("calc-history", JSON.stringify(history));
+}, [history]); //watches for any changes in history and updates localStorage immediately.
 
   // --- Scientific handlers ---
   const handleFunction = (fn) => {
@@ -353,27 +373,38 @@ const itemVariants = {
 {showHistory && (
   <div className="history-panel">
     {history.length === 0 ? (
-      <p></p>
-    ) : (
-      <>
-        {history.map((entry, index) => (
-          <div
-            key={index}
-            className="history-entry"
-            onClick={() => setInput(entry.split("=")[0].trim())}
-          >
-            {entry}
-          </div>
-        ))}
-        {/* Clear button */}
-        <button 
-          className="clear-history" 
-          onClick={() => setHistory([])}
-        >
-          Clear History
-        </button>
-      </>
-    )}
+  <p></p>
+) : (
+  <>
+    {history.map((entry, index) => (
+      <div
+        key={index}
+        className="history-entry"
+        onClick={() => setInput(entry.split("=")[0].trim())}
+      >
+        {entry}
+      </div>
+    ))}
+
+    <div className="history-buttons">
+      <button 
+        className="clear-history" 
+       onClick={() => {
+  setHistory([]);
+  localStorage.removeItem("calc-history");
+}} //clear history, also clear localStorage
+      >
+        Clear History
+      </button>
+      <button 
+        className="download-history" 
+        onClick={handleDownloadHistory}
+      >
+        Download History
+      </button>
+    </div>
+  </>
+)}
   </div>
 )}
 
